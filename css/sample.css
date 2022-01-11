@@ -1,0 +1,338 @@
+/* サイト全体のフォント指定 */
+body{
+  font-family: "Yu Gothic Medium", "游ゴシック Medium", YuGothic, "游ゴシック体", "ヒラギノ角ゴ Pro W3", sans-serif;
+}
+
+/* リストの設定を消す */
+ul{
+  list-style-type: none;
+}
+
+a{
+  text-decoration: none;
+}
+
+/* トップページ */
+  /* タイトル画像 */
+  header{
+    display: flex;
+    position:fixed;
+    z-index: 500;
+    background-color: #fff;
+    width: 100%;
+  }
+
+  .titleimage{
+    width:250px;
+  }
+
+  .titleimage img{
+    width: 70%;
+  }
+
+  /* メニューバーの加工 */
+  .titlenav{
+    margin-left: auto;
+
+  }
+  nav a{
+    margin:17px;
+    padding: 10px;
+    text-align: center;
+  }
+
+
+
+  nav ul{
+    display:flex;
+    text-align: right;
+  }
+
+  nav li {
+    padding: 0.5em 0;
+    text-align: center;
+    z-index: 1;
+  }
+
+  .sub {
+    left: 0;
+    top: 2em;
+    display: none;
+    width: 100%;
+    z-index: 3;
+  }
+
+  /* タブとの重なり回避 */
+  .blank{
+    padding-bottom: 80px;
+  }
+
+  /* タイトルの加工 */
+  .entitel-form{
+    padding-top: 80px;
+    font-size: 20px;
+    margin: 0px 0px 30px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  /* aboutの文章の位置 */
+
+  .text-posi{
+    text-align: center;
+  }
+
+  /* 利用開始ボタンの加工 */
+  .btn-posi{
+    text-align: center;
+    margin-top: 30px
+  }
+
+  .btn {
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1;
+    position: relative;
+    display: inline-block;
+    padding: 1rem 4rem;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    color: #252921;
+    border-radius: 0.5rem;
+  }
+
+  a.btn-flat {
+    overflow: hidden;
+    padding: 1.2rem 4rem;
+    color: #000;
+    border-radius: 0;
+    background: #fff;
+    border: 2px solid;
+    border-color: #b33e5c;
+    margin-top: 50px;
+  }
+
+  a.btn-flat span {
+    position: relative;
+  }
+
+  a.btn-flat:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100px;
+    height: 100px;
+
+    content: '';
+    -webkit-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
+    -webkit-transform: translateX(-80%) translateY(-25px);
+    transform: translateX(-80%) translateY(-25px);
+
+    border-radius: 50%;
+    background: #b33e5c;
+  }
+
+  a.btn-flat:hover:before {
+    width: 400px;
+    height: 400px;
+    -webkit-transform: translateX(-1%) translateY(-175px);
+    transform: translateX(-1%) translateY(-175px);
+  }
+
+  /* mapの位置 */
+  .map-posi{
+    text-align: center;
+  }
+
+  /* Accessの加工 */
+  .chartall{
+    display:flex;
+    flex-wrap: wrap;
+    width: 540px;
+    margin: 60px auto 60px;
+  }
+
+  .access-title{
+    width: 120px;
+    padding: 0 0 24px 0;
+    margin: 0 0 0 20px;
+    font-weight: normal;
+    text-align: left;
+
+  }
+
+  .access-item{
+    width: 370px;
+    padding: 0 0 24px 0;
+    font-weight: normal;
+    text-align: left;
+  }
+
+  /* contactの加工 */
+  .formback{
+    text-align: center;
+    width: 100%;
+    margin: auto;
+  }
+
+  .form-all{
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+    width: 560px;
+  }
+
+  .form-title{
+    width: 120px;
+    padding:8px 64px 8px 16px;
+    font-weight: normal;
+    text-align: left;
+    border:2px #bfbfbf;
+    border-style: solid solid none none;
+  }
+
+  .form-item{
+    width: 350px;
+    padding:8px 0px 8px 8px;
+    text-align: left;
+    border:2px #bfbfbf;
+    border-style: solid none none none;
+  }
+
+  .btn2 {
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 0.8;
+    display: inline-block;
+    padding: 1rem 2rem;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    color: #252921;
+    border-radius: 0.5rem;
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+
+  /* SNSの設定 */
+  #sns {
+    background: #FAF7F0;
+    padding: 4% 0;
+  }
+  #sns .wrapper_sns {
+    padding-top: 40px;
+    display: flex;
+    justify-content: space-between;
+  }
+  #sns .sub-title_sns {
+    margin-bottom: 30px;
+  }
+  .sns-box {
+    width: 30%;
+    margin-left: 30px;
+  }
+
+  /* プライバシーポリシー */
+  #privacy-panel {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    padding: 20px 60px 20px 60px;
+    background: rgba(0, 0, 0, 0.75);
+
+    display: flex;
+    align-items: flex-start;
+  }
+  #privacy-panel p {
+      flex: 1 1 auto;
+      margin: 0;
+      font-size: 0.9rem;
+      color: #ddd;
+  }
+  #agreebtn {
+      flex: 0 0 150px;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 32px;
+      font-size: 0.9rem;
+      background: #b33e5c;
+      color: #fff;
+  }
+  #agreebtn:hover {
+      background: #b33e5c;
+  }
+  #agreebtn:active {
+      background: #b33e5c;
+  }
+
+  /* footer 設定 */
+  footer{
+    padding: 30px 30px;
+    text-align: center;
+    background-color: #707070;
+    margin-top: 50px;
+  }
+
+/* ログインページ */
+.login{
+  text-align:center;
+}
+
+.loginid{
+  margin-bottom:15px;
+}
+
+/* ワイナリーログページ */
+
+/* 星で評価をつける */
+.star {
+  cursor: pointer; /* クリックできるような表示にする */
+  font-size: 18px;
+}
+
+/* 表の体裁 */
+table {
+  margin: 20px 3%;
+  border: 0.5px solid #b33e5c;
+  width: 70%;
+}
+
+table th, table td {
+  border: 1px solid #b33e5c;
+  text-align: center;
+}
+
+/* 評価ブロックの加工 */
+#evablock{
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+/* アカウント名加工 */
+#acname{
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+

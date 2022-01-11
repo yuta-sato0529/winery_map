@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- 既存のスクリプトの読み込み -->
+    <meta name="discription" content="ワイナlogは想い出のワイナリーを記録したい方に向けたサービスです。行ったワイナリーや飲んだワインを記録できます。">
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/sample.css">
+    <!-- アイコンの表示 -->
+    <title>ワイナlog</title>
+    <link rel="icon" type="image/x-icon" href="./img/22319656.ico">
+    <!-- スマホとPCの画面表示切替 -->
+    <script>
+        let pc_width = 1080;
+        let device = (screen.width < 600 ? 'sp' : 'pc');
+        let view_mode = (device == 'pc' || document.cookie.indexOf('view_mode=pc') != -1 ? 'pc' : 'sp');
+        if (device == 'sp' && view_mode == 'pc') {
+            document.getElementsByName('viewport')[0].setAttribute('content', 'width=' + pc_width + ',initial-scale=1');
+        }
+        
+        $(function () {
+            if (device == 'sp') {
+                if (view_mode == 'pc') {
+                    $('.sp-mode').on('click', function () {
+                        let date = new Date();
+                        date.setTime(0);
+                        document.cookie = 'view_mode=;expires='+date.toGMTString();
+                        location.reload(false);
+                    }).show();
+                } else {
+                    $('.pc-mode').on('click', function () {
+                        document.cookie = 'view_mode=pc';
+                        location.reload(false);
+                    }).show();
+                }
+            }
+        });
+        </script>
+</head>
+<body>
+<header>
+    <!-- タイトルイメージ -->
+    <h1 class="titleimage"><img src="./img/logo.png" alt="ワイナogのロゴ"></h1>
+    
+</header>
+<main>
+    <div class="blank"></div>
+    <div id="acname"></div>
+    <!-- ワイナリー選択画面 -->
+    <p>ワイナリー名選択</p>
+    <select id="prefecture">
+        <option value="">選択してください
+        <option value="aomori">青森県
+        <option value="akita">秋田県
+        <option value="iwate">岩手県
+        <option value="yamagata">山形県
+        <option value="miyagi">宮城県
+        <option value="fukushima">福島県       
+      </select>
+      <select id="winery">
+        <option value="">選択してください</option>
+        <!-- 青森県 -->
+        <option value="サンマモルワイナリー" data-val="aomori">サンマモルワイナリー</option>
+        <option value="ファットリア・ダ・サスィーノ" data-val="aomori">ファットリア・ダ・サスィーノ</option>
+        <!-- 福島県 -->
+        <option value="ふくしま逢瀬ワイナリー" data-val="fukushima">ふくしま逢瀬ワイナリー</option>
+        <option value="吾妻山麓蒸留所" data-val="fukushima">吾妻山麓蒸留所</option>
+        <option value="ふくしま農家の夢ワイン" data-val="fukushima">ふくしま農家の夢ワイン</option>
+        <option value="ワイナリージュン" data-val="fukushima">ワイナリージュン</option>
+        <option value="河内ワイナリー" data-val="fukushima">河内ワイナリー</option>
+      </select>
+
+    <!-- 評価のインプット -->    
+    <!-- <p>ワイナリー名</p>
+    <input type="text" id="key"> -->
+    <p>記載のないワイナリーがある場合は問い合わせフォームよりご連絡ください。</p>
+    <section id="evablock">
+        <p>評価</p>
+        <!-- <input type="text" id="evaluation"> -->
+        <!-- 星を埋め込む箇所 -->
+        <div id="rateit">
+        </div>
+    </section>
+    <p>コメント</p>
+    <div>
+        <textarea id="comment" cols="40" rows="10"></textarea>
+    </div>
+    <input type="submit" id="save" value="投稿">
+    
+    <!-- ワイナリー評価データの表示 -->
+    <table id="list">
+        <tr><th>ワイナリー名</th><td>評価</td><td>コメント</td><td>投稿者名</td><td>削除</td></tr>
+    </table>
+    <!-- ここに評価データが追加されていく -->
+    
+    <a href="./login.html" class="btn btn-flat"><span>ログアウト</span></a>
+    <a href="./index.html" class="btn btn-flat"><span>トップページへ</span></a>
+
+
+</main>
+<!-- javascript記載部分 -->
+
+<!-- rateit読み込み -->
+<link rel="stylesheet" href="./gjunge-rateit.js-81e0667/scripts/rateit.css">
+<script src="./gjunge-rateit.js-81e0667/scripts/jquery.rateit.min.js"></script>
+<!-- 以下firebase -->
+<script type="module">
+    
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+    import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved, onValue, }
+        from "https://cdnjs.cloudflare.com/ajax/libs/firebase/9.6.2/firebase-database.min.js";
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "",
+        authDomain: "winelog-33a66.firebaseapp.com",
+        projectId: "winelog-33a66",
+        storageBucket: "winelog-33a66.appspot.com",
+        messagingSenderId: "914214158405",
+        appId: "1:914214158405:web:4af2fe7d12a8b6b5af632c"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+
+    const db = getDatabase(app); // RealtimeDBに接続
+    const dbRef = ref(db, "winelog2"); // RealtimeDB内の"winelog2"を使う
+
+    // 星で評価をつける
+    $(function() {
+        // RateItの設定 ...（2）
+        $("#rateit").rateit({
+            min: 0 ,
+            max: 5 ,
+            step: 0.5,  
+        });
+    });
+    // ログインアカウントの取得
+    let accountname = localStorage.getItem("agree")
+    const html2 = '<p>アカウント名:'+accountname+'</p>';
+    $("#acname").append(html2);
+
+    // 投稿ボタンでデータ登録
+    $('#save').on('click', function(){
+               
+        const winerydata = {
+            account: localStorage.getItem("agree"), //ローカルストレージよりアカウント名を取得
+            title: $('#winery').val(),
+            stars: $('#rateit').rateit('value'),
+            comment: $('#comment').val()
+        }
+        // console.log(winerydata);
+        const newPostRef = push(dbRef); // pushできる状態にする
+        set(newPostRef, winerydata); // DBに値を送信
+    })
+
+    // 投稿ボタンを押すと表に反映される。
+    // $('#save').on('click', function(){
+    //         let winerydata = {
+    //            title: $('#key').val(),
+    //            stars: $('#rateit').rateit('value'),
+    //            comment: $('#comment').val()
+    //         }
+    //     console.log(winerydata);
+    //     const html = '<tr><th>'+winerydata.title+'</th><td>'+winerydata.stars+'</td><td>'+winerydata.comment+'</td></tr>';
+    //     $("#list").append(html);
+    // })  
+    
+    // リストに追加
+    let $winery = $('select[id="winery"]');
+        $('#prefecture').change(function() {
+        let val1 = $(this).val();  
+        $winery.find('option').each(function() {
+            let val2 = $(this).data('val');
+            if (val1 === val2) {
+            $(this).show();
+            }else {
+            $(this).hide();
+            }
+        })
+    })
+
+    // winery.titleが選択したものと同じだった場合、ワイナリー名が同タイトルのもののみを表に表示する。
+    // $('#winery').change(function() {
+    //     let wineryname = $('#winery').val();
+    //     // console.log(wineryname); ok
+    //     let wineryarray ={};
+    //     onValue(dbRef, function (data) {
+    //        wineryarray = data.val();
+    //     });
+    //     console.log(wineryarray);
+    //     // const winerydata = wineryarray.value();
+    //     // console.log(winerydata);
+    //     // winerydata.forEach(object =>{
+    //     //     if(object.title === winerydata){
+    //     //          console.log(object);
+    //     //         }
+    //     // });
+
+    // });
+    // 表に追加する
+    onChildAdded(dbRef, function (data) {
+        const winerydata = data.val();
+        const key = data.key; 
+        const html = '<tr><th>'+winerydata.title+'</th><td>'+winerydata.stars+'</td><td>'+winerydata.comment+'</td><td>'+winerydata.account+'</td><td><button class="remove" Id="'+key+'">YES</button></td></tr>';
+        $("#list").append(html); //listに追加
+    })
+
+    // 削除ボタン
+    $(document).on("click",".remove",function(){
+            remove(ref(db, "winelog2/" +$(this).attr("id")));
+            $(this).parent().remove();
+            window.location.reload();
+    });
+
+  </script>
+
+<footer>
+    <small>copyrights 2021 ワイナlog All Righths Reserved</small>
+</footer>
+
+</body>
+</html>
