@@ -104,10 +104,30 @@
     </div>
     <input type="submit" id="save" value="投稿">
     
-    <!-- ワイナリー評価データの表示 -->
+    <!-- 選択したワイナリー評価データの表示 -->    
+    <table id="list2">
+        <caption>選択したワイナリーの過去の評価</caption>
+        <thead>
+            <tr><th>ワイナリー名</th><td>評価</td><td>コメント</td><td>投稿者名</td></tr>
+        </thead>
+        <tbody id="list3">
+        </tbody>
+    </table>
+    
+    <!-- ユーザーの過去のコメント -->
+
+    <!-- <table id="list4">
+        <caption>あなたの過去の評価</caption>
+        <tr><th>ワイナリー名</th><td>評価</td><td>コメント</td><td>投稿者名</td><td>削除</td></tr>
+    </table> -->
+    
+    
     <table id="list">
+        <caption>全てのワイナリーの評価</caption>
         <tr><th>ワイナリー名</th><td>評価</td><td>コメント</td><td>投稿者名</td><td>削除</td></tr>
     </table>
+
+    
     <!-- ここに評価データが追加されていく -->
     
     <a href="./login.html" class="btn btn-flat"><span>ログアウト</span></a>
@@ -127,7 +147,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js";
     // TODO: Add SDKs for Firebase products that you want to use
     // https://firebase.google.com/docs/web/setup#available-libraries
-    import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved, onValue, }
+    import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved, onValue,}
         from "https://cdnjs.cloudflare.com/ajax/libs/firebase/9.6.2/firebase-database.min.js";
     // Your web app's Firebase configuration
     const firebaseConfig = {
@@ -200,23 +220,43 @@
     })
 
     // winery.titleが選択したものと同じだった場合、ワイナリー名が同タイトルのもののみを表に表示する。
-    // $('#winery').change(function() {
-    //     let wineryname = $('#winery').val();
-    //     // console.log(wineryname); ok
-    //     let wineryarray ={};
-    //     onValue(dbRef, function (data) {
-    //        wineryarray = data.val();
-    //     });
-    //     console.log(wineryarray);
-    //     // const winerydata = wineryarray.value();
-    //     // console.log(winerydata);
-    //     // winerydata.forEach(object =>{
-    //     //     if(object.title === winerydata){
-    //     //          console.log(object);
-    //     //         }
-    //     // });
+    $('#winery').change(function() {
+        $("#list3").remove();
+        const html3 = '<tbody id="list3"></tbody>'
+        $("#list2").append(html3);
+        let wineryname = $('#winery').val();
+        // console.log(wineryname); ok
+        let wineryarray ={};
+        onValue(dbRef, function (data) {
+           wineryarray = data.val();
+        });
+        console.log(wineryarray);
+        // console.log(wineryarray);ok keyを含めて要素を取得。
+        let winer = Object.values(wineryarray);
+        winer.forEach(function(object){
+                if(object.title === wineryname){
+                    const html = '<tr><th>'+object.title+'</th><td>'+object.stars+'</td><td>'+object.comment+'</td><td>'+object.account+'</td></tr>';
+                    $("#list2").append(html); //listに追加
+                    }
+        });
+    });
 
-    // });
+    // ログインしたIDと投稿者名が一致する人の評価を記載する
+        // $(document).ready(function(){
+        //     let wineryarray ={};
+        //         onValue(dbRef, function (data) {
+        //         wineryarray = data.val();
+        //         });
+        //     console.log(wineryarray);
+        //         let winer = Object.values(wineryarray);
+        //     winer.forEach(function(object){
+        //             if(object.account === accountname){
+        //                 const key = data.key; 
+        //                 const html4 = '<tr><th>'+winerydata.title+'</th><td>'+winerydata.stars+'</td><td>'+winerydata.comment+'</td><td>'+winerydata.account+'</td><td><button class="remove" Id="'+key+'">YES</button></td></tr>';
+        //                 $("#list4").append(html4); //listに追加
+        //                 }
+        //     });
+        // });
     // 表に追加する
     onChildAdded(dbRef, function (data) {
         const winerydata = data.val();
@@ -232,7 +272,7 @@
             window.location.reload();
     });
 
-  </script>
+</script>
 
 <footer>
     <small>copyrights 2021 ワイナlog All Righths Reserved</small>
